@@ -11,39 +11,17 @@
 		<p>Press start button to begin the five question quiz:</p>
 		<button type="button" class="start">Start</button>
 	</div>
-	<div class='js-questions-page hidden'>
-		<h2>Question #: </h2>
-		<form>
-			<ul>
-				<li>
-					<input type="radio" name="answer" required>${state.questions.[index].choice[0]}
-				</li>
-				<li>				
-					<input type="radio" name="answer">${state.questions.[index].choice[1]}
-				</li>
-				<li>			
-					<input type="radio" name="answer">${state.questions.[index].choice[2]}
-				</li>
-				<li>			
-					<input type="radio" name="answer">${state.questions.[index].choice[3]}
-				</li>
-			</ul>
-			<button type="submit">Submit Answer</button>
-		</form>
-		<p class="js-current-question">current ?: </p>
-		<p class="js-score">Score: </p>
+
+	<div class='js-questions-page hidden'>-->
+		
 	</div>
 
 	<div class="js-feedback-wrong hidden">
-		<h3>Oops, you got that one wrong.</h3>
-		<p>Press next to proceed to next question:</p>
-		<button type="submit">Next Question</button>
+
 	</div>
-	
+
 	<div class="js-feedback-right hidden">
-		<h3>You were right!</h3>
-		<p>Press next to proceed to next question:</p>
-		<button type="submit">Next Question</button>
+
 	</div>
 
 	<div class="js-results hidden">

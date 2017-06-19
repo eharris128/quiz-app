@@ -4,11 +4,11 @@
 
 // Create your initial state object
 var appState = {
-    questions :[],
+    questions: [],
     score: 0,
     correctAnswer: [],
     page: 0
-    //page [start, question, resutls, final]
+
     //page 0: start; page 1: question; page 2: results; 3: final;
     // User's answer choice(s)	
     // Has quiz started?
@@ -50,33 +50,29 @@ var appState = {
 //for Current ?: index+1 edge case for question 5: may produce undefined
 let questionTemplate = (state, index) => {
   console.log(index);
-  return (`<div class='js-questions-page hidden'>
-      <h2>Question #: </h2>
+  return (`<h2>Question #: ${state.questions[index].question}</h2>
       <form>
-        <ul>
-          <li>
-            <input type="radio" name="answer" required>${state.questions[index].choice[0]}
-          </li>
-          <li>        
-            <input type="radio" name="answer">${state.questions[index].choice[1]}
-          </li>
-          <li>      
-            <input type="radio" name="answer">${state.questions[index].choice[2]}
-          </li>
-          <li>      
-            <input type="radio" name="answer">${state.questions[index].choice[3]}
-          </li>
-        </ul>
-        <button class ="js-question-submit type="submit">Submit Answer</button>
-      </form>
+        <fieldset>
+          <legend> Question: </legend>
+          <input id="answer0" type="radio" name="answer" value="0" required>	
+          <label for="answer0">${state.questions[index].choice[0]}</label>
+          <input id="answer0" type="radio" name="answer" value="1">
+          <label for="answer1">${state.questions[index].choice[1]}	</label>				
+          <input for="answer0" type="radio" name="answer" value="2">
+          <label id="answer2">${state.questions[index].choice[2]}</label>					
+          <input for="answer0" type="radio" name="answer" value="3">
+          <label id="answer3">${state.questions[index].choice[3]}</label>			
+        </fieldset>
+        <button type="submit">Submit Answer</button>
+		  </form>
       <p class="js-current-question">Current ?: ${state.questions[index+1]} out of 5</p>
-      <p class="js-score">Score: </p>
-    </div>`);
+      <p class="js-score">Score: </p>`);
   };
 
-let correctAnswerTemplate = (state,index) => {
-  return  (`
-    <div class="js-feedback-right hidden">
+
+let correctAnswerTemplate = (state, index) => {
+  return (`
+    <div class="js-feedback-right">
       <h3>You were right!</h3>
       <p>Press next to proceed to next question:</p>
       <button type="submit">Next Question</button>
@@ -84,9 +80,9 @@ let correctAnswerTemplate = (state,index) => {
   `);
 };
 
-let wrongAnswerTemplate = (state,index) => {
+let wrongAnswerTemplate = (state, index) => {
   return (`
-    <div class="js-feedback-wrong hidden">
+    <div class="js-feedback-wrong">
       <h3>Oops, you got that one wrong.</h3>
       <p>Press next to proceed to next question:</p>
       <button type="submit">Next Question</button>
@@ -95,13 +91,13 @@ let wrongAnswerTemplate = (state,index) => {
 };
 // State manipulation functions
 
-function loopsThroughQuestions(state, index) {
-  for(let i = 0; i < state.questions.length; i++) {
-    questionTemplate(state,i);
+// function loopsThroughQuestions(state, index) {
+//   for(let i = 0; i < state.questions.length; i++) {
+//     questionTemplate(state,i);
 
-    // renderQuestion(state,index);
-  }
-}
+//     renderQuestion(state,index);
+//   }
+// }
 
 function isUserInputCorrect() {
 
@@ -115,7 +111,7 @@ function startQuiz(state) {
 	//move from start page to the questions page
 	//move from 0 to 1
 	appState.page++;
-	renderPage(state, appState.page)
+	renderPage(state, appState.page, $('body'))
   loopsThroughQuestions(state);
 }
 
@@ -148,17 +144,24 @@ function renderQuestion(state,index) {
   $('.js-questions-page').removeClass('hidden');
 }
 
-function renderPage(state, currentPage) {
+
+
+function renderPage(state, currentPage, element) {
 	//Start visible; 3 hidden
 	//Questions page visible; 3 hidden
-	if(appState.page === 1) {
-		console.log("I am on my questions page");
-		$('.js-questions-page').removeClass('hidden')
-		$('.js-start-page').addClass('hidden')
-	} else if (appStage.page === 2) {
-		$('.js-questions-page').addClass('hidden')
-		$('.js-feedback').addClass('hidden')
-	}
+  console.log("renderPage log works");
+  const myHTML = element.find('.js-questions-page');
+
+    if(appState.page === 1) {
+      console.log("I am on my questions page");
+      // update score
+      $('.js-questions-page').removeClass('hidden')
+      $('.js-start-page').addClass('hidden')
+    } else if (appStage.page === 2) {
+      $('.js-questions-page').addClass('hidden')
+      $('.js-feedback').addClass('hidden')
+    }
+   
 }
 
 // Event handlers
@@ -180,5 +183,6 @@ $('.js-questions-submit').submit(function(event) {
 });
 
 $(function() {
+  renderPage(appState, $('body'));
 	handlesStart();
 })
