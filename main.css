@@ -1,4 +1,7 @@
-/*
-input[type=radio] {
-	display: inline-block;
-}*/
+ul > li {
+	list-style-type: none;
+}
+
+.hidden {
+	display: none;
+}

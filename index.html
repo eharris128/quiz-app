@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Quiz</title>
+	<title>Math Quiz</title>
 </head>
 <link rel="stylesheet" type="text/css" href="main.css">
 <body>
@@ -11,31 +11,46 @@
 		<p>Press start button to begin the five question quiz:</p>
 		<button type="button" class="start">Start</button>
 	</div>
-	<div class='js-questions-page'>
+	<div class='js-questions-page hidden'>
 		<h2>Question #: </h2>
 		<form>
-			<input type="radio" name="answer">
-			<label id="answer">My answer</label>
-			<input type="radio" name="answer">
-			<label id="answer">My answer</label>
-			<input type="radio" name="answer">
-			<label id="answer">My answer</label>
-			<input type="radio" name="answer">
-			<label id="answer">My answer</label>
+			<ul>
+				<li>
+					<input type="radio" name="answer" required>${state.questions.[index].choice[0]}
+				</li>
+				<li>				
+					<input type="radio" name="answer">${state.questions.[index].choice[1]}
+				</li>
+				<li>			
+					<input type="radio" name="answer">${state.questions.[index].choice[2]}
+				</li>
+				<li>			
+					<input type="radio" name="answer">${state.questions.[index].choice[3]}
+				</li>
+			</ul>
 			<button type="submit">Submit Answer</button>
 		</form>
 		<p class="js-current-question">current ?: </p>
 		<p class="js-score">Score: </p>
 	</div>
-	<div class="js-feedback">
-		<h3> You were: </h3>
-		<p>Press next to proceed to next questoin:</p>
+
+	<div class="js-feedback-wrong hidden">
+		<h3>Oops, you got that one wrong.</h3>
+		<p>Press next to proceed to next question:</p>
 		<button type="submit">Next Question</button>
 	</div>
-	<div class="js-results">
-		<h2>Your Score was:</h2>
-		<p>Press reset to try again.</p>
-		<button type="button">Reset</button>
+	
+	<div class="js-feedback-right hidden">
+		<h3>You were right!</h3>
+		<p>Press next to proceed to next question:</p>
+		<button type="submit">Next Question</button>
+	</div>
+
+	<div class="js-results hidden">
+		<h2>Your Quiz Results</h2>
+		<h3>Your Score was:</h3>
+		<p>Would you like to play again?</p>
+		<button type="button">Play Again</button>
 	</div>
    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="app.js"></script>

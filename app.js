@@ -1,18 +1,14 @@
-//check state at app load
-//quiz start page
-//question 1 answer
-//question 1 answer right or wrong output
-
+// Nice to Haves
+// 1. randomize questions
+// 2. 
 
 // Create your initial state object
 var appState = {
-    // Questions (with answers)
-    questions: [
-    {question:'Question 1', choice: ['a','b','c','d'], correctAnswer: 0},
-    ],
-    score: null,
+    questions :[],
+    score: 0,
     correctAnswer: [],
     page: 0
+
     //page [start, question, resutls, final]
     //page 0: start; page 1: question; page 2: results; 3: final;
     // User's answer choice(s)	
@@ -20,13 +16,66 @@ var appState = {
     // What is the current question?
     // Other things like score? Anything else?
 };
+ // Questions (with answers)
+    const questions = [
+      {
+        question:'What is 5 % 10?', 
+        choice: ['0','1','5','50'], 
+        answer: 2,
+      },
+      {
+        question:'I am thinking of a number between 1 & 3, what is it?', 
+        choice: ['1','2','3','4'], 
+        answer: 1,
+      },
+      {
+        question:'What is 10^3?', 
+        choice: ['300','10000','1000','100'], 
+        answer: 2,
+      },
+      {
+        question:'What is the square root of 144?', 
+        choice: ['9','1440','10','12'], 
+        answer: 3
+      },
+      {
+        question:'Please tell me the area of a 3x3 square:', 
+        choice: ['33','3','9','6'], 
+        answer: 2
+      },
+    ];
 
-// State manipulation functions...
+// State manipulation functions
+
 function startQuiz(state) {
 	//move from start page to the questions page
-	//move fromr 0 to 1
+	//move from 0 to 1
 	appState.page++;
 	renderPage(state, appState.page)
+}
+
+// get question
+
+
+// get page
+const getPage = function(state) {
+  state.page;
+}
+
+// get score
+const getScore = function(state) {
+  state.score;
+}
+
+// update score
+const updateScore = function(state) {
+  state.score++;
+}
+
+// reset quiz
+const resetQuiz = function(state) {
+  state.page = 0;
+  state.score = 0;
 }
 
 // Render functions...
