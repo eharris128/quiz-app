@@ -47,9 +47,16 @@ var appState = {
     ];
 
 
+// function questionRandomizer (arr) {
+//   let randomizedQuestions = [];
+//   let i
+//     let random = (Math.floor(Math.Random()*10);
+
+  
+// }
+
 //for Current ?: index+1 edge case for question 5: may produce undefined
 let questionTemplate = (state, index) => {
-  console.log(index);
   return (`<h2>Question #: ${state.questions[index].question}</h2>
       <form>
         <fieldset>
@@ -63,10 +70,10 @@ let questionTemplate = (state, index) => {
           <input for="answer0" type="radio" name="answer" value="3">
           <label id="answer3">${state.questions[index].choice[3]}</label>			
         </fieldset>
-        <button type="submit">Submit Answer</button>
+        <button type="submit jq-question-submit">Submit Answer</button>
 		  </form>
       <p class="js-current-question">Current ?: ${state.questions[index+1]} out of 5</p>
-      <p class="js-score">Score: </p>`);
+      <p class="js-score">Score: ${state.score}</p>`);
   };
 
 
@@ -91,14 +98,6 @@ let wrongAnswerTemplate = (state, index) => {
 };
 // State manipulation functions
 
-// function loopsThroughQuestions(state, index) {
-//   for(let i = 0; i < state.questions.length; i++) {
-//     questionTemplate(state,i);
-
-//     renderQuestion(state,index);
-//   }
-// }
-
 function isUserInputCorrect() {
 
 }
@@ -112,7 +111,6 @@ function startQuiz(state) {
 	//move from 0 to 1
 	appState.page++;
 	renderPage(state, appState.page, $('body'))
-  loopsThroughQuestions(state);
 }
 
 // get question
@@ -140,29 +138,85 @@ const resetQuiz = function(state) {
 }
 
 // Render functions...
-function renderQuestion(state,index) {
+function renderQuestion(state,index,element) {
+  console.log(`I am on question: ${index}`);
+
   $('.js-questions-page').removeClass('hidden');
+
+  const myHTML = element.find('.js-questions-page');
+  $(myHTML).html(questionTemplate(state, index));
 }
 
+function renderResults(state,index,element) {
+  console.log(`I am looking at results after question: ${index}`);
+}
 
+// X pages:
+  //0: start
+  //1: question (1)
+  //2: Results
+  //3: questions (2)
+  //4: results
+  //5: questions (3)
+  //6: results
+  //7: questions (4)
+  //8: results
+  //9: questions (5)
+  //10: Final Page
 
 function renderPage(state, currentPage, element) {
 	//Start visible; 3 hidden
 	//Questions page visible; 3 hidden
-  console.log("renderPage log works");
-  const myHTML = element.find('.js-questions-page');
 
-    if(appState.page === 1) {
-      console.log("I am on my questions page");
-      // update score
-      $('.js-questions-page').removeClass('hidden')
+     if (currentPage === 0 ) {
+      //startPageRenderFunction():
+     } else if (currentPage === 1) {
       $('.js-start-page').addClass('hidden')
-    } else if (appStage.page === 2) {
+      renderQuestion(state, 0, $('body'));
+      // update score
+    } else if (currentPage === 2) {
       $('.js-questions-page').addClass('hidden')
       $('.js-feedback').addClass('hidden')
-    }
+    } 
    
 }
+
+/*      
+      // start
+      $('.js-start-page').removeClass('hidden')
+      $('.js-questions-page').addClass('hidden')
+      $('.js-feedback-wrong').addClass('hidden')
+      $('.js-feedback-right').addClass('hidden')
+      $('.js-results').addClass('hidden')
+
+      // questions
+      $('.js-start-page').addClass('hidden')
+      $('.js-questions-page').removeClass('hidden')
+      $('.js-feedback-wrong').addClass('hidden')
+      $('.js-feedback-right').addClass('hidden')
+      $('.js-results').addClass('hidden')
+
+      // feedback right
+      $('.js-start-page').addClass('hidden')
+      $('.js-questions-page').removeClass('hidden')
+      $('.js-feedback-wrong').addClass('hidden')
+      $('.js-feedback-right').addClass('hidden')
+      $('.js-results').addClass('hidden')
+
+      // feedback wrong
+      $('.js-start-page').addClass('hidden')
+      $('.js-questions-page').addClass('hidden')
+      $('.js-feedback-wrong').removeClass('hidden')
+      $('.js-feedback-right').addClass('hidden')
+      $('.js-results').addClass('hidden')
+
+      // results
+      $('.js-start-page').addClass('hidden')
+      $('.js-questions-page').addClass('hidden')
+      $('.js-feedback-wrong').addClass('hidden')
+      $('.js-feedback-right').addClass('hidden')
+      $('.js-results').removeClass('hidden')
+*/
 
 // Event handlers
 // When start button is submitted
@@ -175,14 +229,18 @@ function handlesStart () {
 }
 
 // Answer is submitted
-$('.js-questions-submit').submit(function(event) {
+$('.js-question-submit').on('click', function(event) {
   // 1. Retrieve from DOM - which answer was clicked?
+  let userChoice =  $(this).closest('input[type=radio]');
+  console.log(userChoice);
   // 2. Change state with state mod function
 
   // 3. Invoke render function
 });
 
 $(function() {
-  renderPage(appState, $('body'));
+  renderPage(appState, appState.page, $('body'));
 	handlesStart();
 })
+
+//state.questions[index].choice[1]
