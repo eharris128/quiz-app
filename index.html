@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quiz</title>
+</head>
+<link rel="stylesheet" type="text/css" href="main.css">
+<body>
+	<div class='js-start-page'>
+		<h1>Quiz</h1>
+		<p>Welcome to the Quiz</p>
+		<p>Press start button to begin the five question quiz:</p>
+		<button type="button" class="start">Start</button>
+	</div>
+	<div class='js-questions-page'>
+		<h2>Question #: </h2>
+		<form>
+			<input type="radio" name="answer">
+			<label id="answer">My answer</label>
+			<input type="radio" name="answer">
+			<label id="answer">My answer</label>
+			<input type="radio" name="answer">
+			<label id="answer">My answer</label>
+			<input type="radio" name="answer">
+			<label id="answer">My answer</label>
+			<button type="submit">Submit Answer</button>
+		</form>
+		<p class="js-current-question">current ?: </p>
+		<p class="js-score">Score: </p>
+	</div>
+	<div class="js-feedback">
+		<h3> You were: </h3>
+		<p>Press next to proceed to next questoin:</p>
+		<button type="submit">Next Question</button>
+	</div>
+	<div class="js-results">
+		<h2>Your Score was:</h2>
+		<p>Press reset to try again.</p>
+		<button type="button">Reset</button>
+	</div>
+   <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html>
