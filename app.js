@@ -8,7 +8,6 @@ var appState = {
     score: 0,
     correctAnswer: [],
     page: 0
-
     //page [start, question, resutls, final]
     //page 0: start; page 1: question; page 2: results; 3: final;
     // User's answer choice(s)	
@@ -16,8 +15,10 @@ var appState = {
     // What is the current question?
     // Other things like score? Anything else?
 };
+
+
  // Questions (with answers)
-    const questions = [
+    appState.questions = [
       {
         question:'What is 5 % 10?', 
         choice: ['0','1','5','50'], 
@@ -45,13 +46,77 @@ var appState = {
       },
     ];
 
+
+//for Current ?: index+1 edge case for question 5: may produce undefined
+let questionTemplate = (state, index) => {
+  console.log(index);
+  return (`<div class='js-questions-page hidden'>
+      <h2>Question #: </h2>
+      <form>
+        <ul>
+          <li>
+            <input type="radio" name="answer" required>${state.questions[index].choice[0]}
+          </li>
+          <li>        
+            <input type="radio" name="answer">${state.questions[index].choice[1]}
+          </li>
+          <li>      
+            <input type="radio" name="answer">${state.questions[index].choice[2]}
+          </li>
+          <li>      
+            <input type="radio" name="answer">${state.questions[index].choice[3]}
+          </li>
+        </ul>
+        <button class ="js-question-submit type="submit">Submit Answer</button>
+      </form>
+      <p class="js-current-question">Current ?: ${state.questions[index+1]} out of 5</p>
+      <p class="js-score">Score: </p>
+    </div>`);
+  };
+
+let correctAnswerTemplate = (state,index) => {
+  return  (`
+    <div class="js-feedback-right hidden">
+      <h3>You were right!</h3>
+      <p>Press next to proceed to next question:</p>
+      <button type="submit">Next Question</button>
+    </div>
+  `);
+};
+
+let wrongAnswerTemplate = (state,index) => {
+  return (`
+    <div class="js-feedback-wrong hidden">
+      <h3>Oops, you got that one wrong.</h3>
+      <p>Press next to proceed to next question:</p>
+      <button type="submit">Next Question</button>
+    </div>
+  `);
+};
 // State manipulation functions
+
+function loopsThroughQuestions(state, index) {
+  for(let i = 0; i < state.questions.length; i++) {
+    questionTemplate(state,i);
+
+    // renderQuestion(state,index);
+  }
+}
+
+function isUserInputCorrect() {
+
+}
+
+function randomQuestion(state) {
+
+}
 
 function startQuiz(state) {
 	//move from start page to the questions page
 	//move from 0 to 1
 	appState.page++;
 	renderPage(state, appState.page)
+  loopsThroughQuestions(state);
 }
 
 // get question
@@ -79,6 +144,10 @@ const resetQuiz = function(state) {
 }
 
 // Render functions...
+function renderQuestion(state,index) {
+  $('.js-questions-page').removeClass('hidden');
+}
+
 function renderPage(state, currentPage) {
 	//Start visible; 3 hidden
 	//Questions page visible; 3 hidden
@@ -91,6 +160,7 @@ function renderPage(state, currentPage) {
 		$('.js-feedback').addClass('hidden')
 	}
 }
+
 // Event handlers
 // When start button is submitted
 function handlesStart () {
@@ -102,9 +172,10 @@ function handlesStart () {
 }
 
 // Answer is submitted
-$('.answer').submit(function(event) {
+$('.js-questions-submit').submit(function(event) {
   // 1. Retrieve from DOM - which answer was clicked?
   // 2. Change state with state mod function
+
   // 3. Invoke render function
 });
 
