@@ -49,11 +49,11 @@ legend, h2 {
 body {
   position: relative;
   /*background-color: #2b3e50;*/
-/*  background: url(http://media.giphy.com/media/TZf4ZyXb0lXXi/giphy.gif) 25%;*/
+  background: url(http://media.giphy.com/media/TZf4ZyXb0lXXi/giphy.gif) 25%;
   background-size: cover;
 background-repeat:no-repeat;
   text-align: center;
-  color: white;
+
   /*background-repeat: no-repeat;*/
 
 /*box-shadow:inset 6px 5px 40px 9px #142529;*/
@@ -70,10 +70,16 @@ background-repeat:no-repeat;
     /*margin-bottom: -1px;*/
     background-color: #4e5d6c;
     /*border: 1px solid;*/
+      color: white;
 }
 /* questions */
-	#questions h2 {
-		font-size: 22px;
+	.js-questions-page h2 {
+		font-size: 20px;
+	}
+
+	.js-questions-page h3 {
+		font-size: 14px;
+    text-align: left;
 	}
 
 	#questions {
@@ -93,6 +99,11 @@ background-repeat:no-repeat;
 	input[type='radio'] {
 		font-size: 40px;
 	}
+
+.js-feedback-page, .js-questions-page {
+  padding: 20px;
+  font-size: 16px;
+}
 
 .js.start-page, .js-questions-page, .js-feedback-wrong, .js-feedback-right, .js-results {
   /*position: absolute;
@@ -121,4 +132,11 @@ background-repeat:no-repeat;
  color: #155570;
  box-shadow: inset 0 1px 0 0 #FFF6CE,inset 0 -1px 0 0 #E3C852,inset 0 0 0 1px #FCE88D;
  background-color: #868AFC;
+}
+
+.js-start-page {
+  color: white;
+}
+.js-results-page {
+  color: white;
 }
