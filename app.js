@@ -219,7 +219,7 @@ $(function() {
   handlesStart();
   bgAudio = document.getElementById("wav");
   bgAudio.volume = 0.04;
- // $('#wav').get(0).play();
+ $('#wav').get(0).play();
 
 })
 
