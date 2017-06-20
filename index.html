@@ -1,47 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>Math Quiz</title>
 </head>
 <link rel="stylesheet" type="text/css" href="main.css">
 <body>
-<header>
-		<h1>Math Quiz</h1>
-		<!--<p>Welcome to the Quiz</p>-->
-</header>
 
+	<header role ="header">
+			<h1>Math Quiz</h1>
+	</header>
 
-	<div class='js-start-page'>
+	<main role="main">
 
-		<p><br>Press start button to begin the five question quiz:</p>
-		<button type="button" id="button" class="button">Start</button>
-	</div>
-
-	<div class = "container">
-
-		<div class='js-questions-page hidden'>
-
-		</div>
-		<div class='js-feedback-page hidden'>
-
+		<div class='js-start-page'>
+			<p><br>Press start button to begin the five question quiz:</p>
+			<button type="button" id="button" class="button">Start</button>
 		</div>
 
-	</div>
+		<div class = "container">
+			<div class='js-questions-page hidden'></div>
+			<div class='js-feedback-page hidden'></div>
+		</div>
 
-	<div class="js-results-page hidden">
-		<h2>Your Quiz Results</h2>
-		<h3>Your Score was:</h3>
-		<p>Would you like to play again?</p>
-		<button type="button" class="button">Play Again</button>
-	</div>
-	</section>
+		<div class="js-results-page hidden"></div>
 
 
-<audio preload="auto">
-    <source src="Button-sound.mp3" type="audio/mp3" />
-</audio>
-<audio loop id='wav' src='spaceloop.wav'></audio>
-	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="app.js"></script>
+	<audio preload="auto">
+	    <source src="Button-sound.mp3" type="audio/mp3" />
+	</audio>
+	<audio loop id='wav' src='spaceloop.wav'></audio>
+		<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="app.js"></script>
+	</main>
 </body>
 </html>

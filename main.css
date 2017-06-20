@@ -35,11 +35,6 @@ legend, h2 {
     text-align: left;
 }
 
-/*input[type=radio]{
-  display: none;
- 
-}*/
-
 .hidden {
 	display: none;
 }
@@ -51,7 +46,7 @@ body {
   /*background-color: #2b3e50;*/
   background: url(http://media.giphy.com/media/TZf4ZyXb0lXXi/giphy.gif) 25%;
   background-size: cover;
-background-repeat:no-repeat;
+  background-repeat:no-repeat;
   text-align: center;
 
   /*background-repeat: no-repeat;*/
@@ -82,22 +77,14 @@ background-repeat:no-repeat;
     text-align: left;
 	}
 
-	#questions {
-		width: 400px;
-		padding: 30px 30px 10px 30px;
-		margin: 0 auto;
-		font-size: 22px;
-		border-radius: 2px;
-		background: #4e5d6c;
-		/*box-shadow: 2px 3px 35px black;*/
-		margin-bottom: 50px;
-	}
 
-    #questions p {
-        font-size: 20px;
-    }
 	input[type='radio'] {
 		font-size: 40px;
+		display:none;
+	}
+
+	input[type='radio']:checked + label{
+		background-color: red;
 	}
 
 .js-feedback-page, .js-questions-page {

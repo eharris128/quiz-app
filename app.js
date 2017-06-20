@@ -2,7 +2,6 @@
 // 1. randomize questions
 // 2. 
 
-// Create your initial state object
 var appState = {
     questions: [],
     currentQuestion: 0,
@@ -10,12 +9,6 @@ var appState = {
     lastQuestionCorrect: false,
     userChoice: [],
     view: 'start' || 'question' || 'feedback' || 'results'
-
-    //page 0: start; page 1: question; page 2: results; 3: final;
-    // User's answer choice(s)  
-    // Has quiz started?
-    // What is the current question?
-    // Other things like score? Anything else?
 };
 
 
@@ -33,7 +26,7 @@ var appState = {
       },
       {
         question:'What is cube root of 10,000?', 
-        choice: ['300','10000','1000','100'], 
+        choice: ['300','10000','10','100'], 
         answer: 2,
       },
       {
@@ -59,26 +52,25 @@ var appState = {
   
 // }
 
-//for Current ?: index+1 edge case for question 5: may produce undefined
 let questionTemplate = (state, index) => {
   return (`<h3>Question # ${state.currentQuestion+1}:</h3> <h2>${state.questions[index].question}</h2>
-      <form id="js-form">
+      <form action="/#" id="js-form">
         <fieldset>
           <legend> Pick one: </legend>
           <input id="answer0" type="radio" name="answer" value="0" required>  
-          <label for="answer0">${state.questions[index].choice[0]}</label>
+          <label for="answer0">${state.questions[index].choice[0]}</label></input>
           <input id="answer1" type="radio" name="answer" value="1">
-          <label for="answer1">${state.questions[index].choice[1]}</label>        
-          <input for="answer2" type="radio" name="answer" value="2">
-          <label id="answer2">${state.questions[index].choice[2]}</label>         
-          <input for="answer3" type="radio" name="answer" value="3">
-          <label id="answer3">${state.questions[index].choice[3]}</label>     
+          <label for="answer1">${state.questions[index].choice[1]}</label></input>      
+          <input id="answer2" type="radio" name="answer" value="2">
+          <label for="answer2">${state.questions[index].choice[2]}</label></input>       
+          <input id="answer3" type="radio" name="answer" value="3">
+          <label for="answer3">${state.questions[index].choice[3]}</label></input>
         </fieldset>
         <button class = "button" id="js-question-submit" type="submit">Submit Answer</button>
       </form>
    
       <p class="js-score">Score: ${state.score} / 5</p>`);
-  };
+  }
 
 let correctAnswerTemplate = (state, index) => {
   return (`
@@ -91,10 +83,21 @@ let correctAnswerTemplate = (state, index) => {
 let wrongAnswerTemplate = (state, index) => {
   return (`
       <h3>Oops, you got that one wrong.</h3>
+      <p>The correct answer was: ${state.questions[index].choice[state.questions[index].answer]}</p>
       <p>Press "Next" to proceed to next question:</p>
       <button class="button" type="submit">Next</button>
   `);
 };
+
+let resultsTemplate = (state) => {
+  return (`
+    <h2>Your Quiz Results</h2>
+    <h3>You got: ${state.score} correct, ${5- state.score} incorrect</h3>
+    <p>Would you like to play again?</p>
+    <button type="button" class="button">Play Again</button>
+    `)
+};
+
 // State manipulation functions
 
 //passed in : isUserInputCorrect(appState, userChoice);
@@ -102,10 +105,7 @@ function isUserInputCorrect(state, userInput) {
   // Creates userInput array
   // state.userChoice.push(userInput);
 
-  // console.log(state.userChoice);
-  // console.log(parseInt(userInput,10))
-  // console.log(typeof state.questions[state.currentQuestion].answer)
-
+  state.lastQuestionCorrect = false;
   if(state.questions[state.currentQuestion].answer === parseInt(userInput,10)) {
     state.score++;
     state.lastQuestionCorrect = true;
@@ -114,14 +114,11 @@ function isUserInputCorrect(state, userInput) {
 }
 
 function updateViewToQuestionPage(state, view) {
-  //move from start page to the questions page
-  //move from 0 to 1
   state.view = view;
   renderPage(state, $('body'));
 }
 
 function updateViewToFeedbackPage(state, view) {
-  //move from question page to the feedback page
   state.view = view;
   renderPage(state, $('body'));
 }
@@ -131,27 +128,22 @@ function updateViewToResultsPage (state, view) {
   renderPage(state, $('body'));
 }
 
-// reset quiz
-const resetQuiz = function(state) {
-  state.page = 0;
+function resetQuiz (state, view) {
+  state.view = view;
   state.score = 0;
+  state.currentQuestion = 0;
+  renderPage(state, $('body'));
 }
 
 // Render functions...
 function renderQuestion(state, element) {
-    console.log(`I am on question: ${state.currentQuestion}`);
-
     $('.js-questions-page').removeClass('hidden');
 
     const myHTML = element.find('.js-questions-page');
     $(myHTML).html(questionTemplate(state, state.currentQuestion));
   } 
   
-
-
 function renderFeedback(state,element) {
-    console.log(`I am looking at results after question: ${state.currentQuestion}`);
-
     $('.js-feedback-page').removeClass('hidden');
 
     const myHTML = element.find('.js-feedback-page');
@@ -163,55 +155,63 @@ function renderFeedback(state,element) {
     }
 }
 
+function renderResults(state,element) {
+   $('.js-results-page').removeClass('hidden');
+    const myHTML = element.find('.js-results-page');
+    $(myHTML).html(resultsTemplate(state));
+}
 
 function renderPage(state, element) {
-  //Start visible; 3 hidden
+
   $('div[class$="-page"').addClass('hidden');
      if (state.view === 'start' ) {
-      //startPageRenderFunction():
+      $('.js-results-page').addClass('hidden');
+      $('.js-start-page').removeClass('hidden');
      } else if (state.view === 'question') {
         renderQuestion(state, $('body'));
         $('.js-questions-page').removeClass('hidden');
-        // update score
     } else if (state.view === 'feedback') {
         renderFeedback(state, $('body'))
         $('.js-feedback-page').removeClass('hidden');
-    } else {
-      $('.js-results-page').removeClass('hidden');
+    } else if (state.view === 'results') {
+        renderResults(state, $('body'));
+        $('.js-results-page').removeClass('hidden');
     }
    
 }
 
 // Event handlers
+// When start button is submitted
+function handlesStart () {
+  $('#button').on('click', function(event) {
+    updateViewToQuestionPage(appState,'question');
+  });
+}
+
   $('.js-questions-page').submit(function(event) {
     // 1. Retrieve from DOM - which answer was clicked?
     event.preventDefault();
     let userChoice = $(this).find("form input[name=answer]:checked").val();
-    console.log("user selected choice: " + userChoice);
     // 2. Change state with state mod function
     isUserInputCorrect(appState, userChoice);
   });
 
 
-// When start button is submitted
-function handlesStart () {
-  $('#button').on('click', function(event) {
-  // 1. Change state with state mod functio
-    updateViewToQuestionPage(appState,'question');
-  // 2. Invoke render function
-  });
-}
-
 // Answer is submitted
 $('.js-feedback-page').on("click", "button", function(event) {
   event.preventDefault();
-  console.log('are you listening?')
   appState.currentQuestion++;
   if (appState.currentQuestion > 4) {
     updateViewToResultsPage(appState,'results');
   } else {
     updateViewToQuestionPage(appState,'question');
   }
+});
+
+//Listen for restart
+$('.js-results-page').on("click","button",function(event){
+  event.preventDefault();
+  resetQuiz(appState, 'start');
 });
 
 
