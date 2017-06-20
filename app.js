@@ -8,7 +8,13 @@ var appState = {
     currentQuestion: 0,
     score: 0,
     correctAnswer: [],
-    view: 'question'
+    view: 'start' || 'question' || 'feedback' || 'results'
+
+    //page 0: start; page 1: question; page 2: results; 3: final;
+    // User's answer choice(s)  
+    // Has quiz started?
+    // What is the current question?
+    // Other things like score? Anything else?
 };
 
 
@@ -47,8 +53,58 @@ var appState = {
 //   let i
 //     let random = (Math.floor(Math.Random()*10);
 
+  
 // }
 
+//for Current ?: index+1 edge case for question 5: may produce undefined
+let questionTemplate = (state, index) => {
+  return (`<h2>Question #${state.questions[index]}: <br>${state.questions[index].question}</h2>
+      <form>
+        <fieldset>
+          <legend> Pick one: </legend>
+          <input id="answer0" type="radio" name="answer" value="0" required>  
+          <label for="answer0">${state.questions[index].choice[0]}</label>
+          <input id="answer0" type="radio" name="answer" value="1">
+          <label for="answer1">${state.questions[index].choice[1]}  </label>        
+          <input for="answer0" type="radio" name="answer" value="2">
+          <label id="answer2">${state.questions[index].choice[2]}</label>         
+          <input for="answer0" type="radio" name="answer" value="3">
+          <label id="answer3">${state.questions[index].choice[3]}</label>     
+        </fieldset>
+        <button class = "button" type="button jq-question-submit">Submit Answer</button>
+      </form>
+   
+      <p class="js-score">Score: ${state.score} / 5</p>`);
+  };
+
+// let feedbackTemplate = (state, index) => {
+//   //todo : create ternary / if what outputs return You were right or You were wrong depending on answer
+//   return (`
+//       <h3>You were right!</h3>
+//       <p>Press next to proceed to next question:</p>
+//       <button type="submit">Next Question</button>
+//   `);
+// };
+
+let correctAnswerTemplate = (state, index) => {
+  return (`
+    <div class="js-feedback-right-page">
+      <h3>You were right!</h3>
+      <p>Press next to proceed to next question:</p>
+      <button type="submit">Next Question</button>
+    </div>
+  `);
+};
+
+let wrongAnswerTemplate = (state, index) => {
+  return (`
+    <div class="js-feedback-wrong-page">
+      <h3>Oops, you got that one wrong.</h3>
+      <p>Press next to proceed to next question:</p>
+      <button type="submit">Next Question</button>
+    </div>
+  `);
+};
 // State manipulation functions
 
 function isUserInputCorrect() {
@@ -59,11 +115,18 @@ function randomQuestion(state) {
 
 }
 
+// function startQuiz(state) {
+//  //move from start page to the questions page
+//  //move from 0 to 1
+//  appState.page++;
+//  renderPage(state, appState.page, $('body'))
+// }
+
 function updateViewToQuestionPage(state, view) {
-	//move from start page to the questions page
-	//move from 0 to 1
+  //move from start page to the questions page
+  //move from 0 to 1
   state.view = view;
-	renderPage(state, $('body'));
+  renderPage(state, $('body'));
 }
 
 function updateViewToFeedbackPage(state, view) {
@@ -71,6 +134,8 @@ function updateViewToFeedbackPage(state, view) {
   state.view = 'feedback';
   renderPage(state, $('body'));
 }
+// get question
+
 // get question
 
 
@@ -105,49 +170,32 @@ function renderQuestion(state, element) {
   $(myHTML).html(questionTemplate(state, state.currentQuestion));
 }
 
-//This function renders the feedback page (if the button worked)
-function renderFeedback(state, element) {
+function renderResults(state,element) {
   console.log(`I am looking at results after question: ${state.currentQuestion}`);
-
   $('.js-questions-page').addClass('hidden');
   $('.js-feedback-page').removeClass('hidden');
 
   const myHTML = element.find('.js-feedback-page');
+  //ternary operator based template
   $(myHTML).html(feedbackTemplate(state, state.currentQuestion));
 }
 
-  //Render Templates:
-let questionTemplate = (state, index) => {
-  return (`
-    <h2>Question: ${state.questions[index].question}</h2>
-      <form class="js-form">
-        <fieldset>
-          <legend> Question: </legend>
-          <input id="answer0" type="radio" name="answer" value="0" required>  
-          <label for="answer0">${state.questions[index].choice[0]}</label>
-          <input id="answer0" type="radio" name="answer" value="1">
-          <label for="answer1">${state.questions[index].choice[1]}  </label>        
-          <input for="answer0" type="radio" name="answer" value="2">
-          <label id="answer2">${state.questions[index].choice[2]}</label>         
-          <input for="answer0" type="radio" name="answer" value="3">
-          <label id="answer3">${state.questions[index].choice[3]}</label>     
-        </fieldset>
-        <button type="submit" class="js-question-submit">Submit Answer</button>
-      </form>
-      <p class="js-current-question">Current Question: ${state.currentQuestion} out of 5</p>
-      <p class="js-score">Score: ${state.score}</p>
-      `);
-  };
+// function renderPage(state, currentPage, element) {
+//  //Start visible; 3 hidden
+//  //Questions page visible; 3 hidden
 
-
-let feedbackTemplate = (state, index) => {
-  //todo : create ternary / if what outputs return You were right or You were wrong depending on answer
-  return (`
-      <h3>You were right!</h3>
-      <p>Press next to proceed to next question:</p>
-      <button type="submit">Next Question</button>
-  `);
-};
+//      if (currentPage === 0 ) {
+//       //startPageRenderFunction():
+//      } else if (currentPage === 1) {
+//       $('.js-start-page').addClass('hidden')
+//       renderQuestion(state, 0, $('body'));
+//       // update score
+//     } else if (currentPage === 2) {
+//       $('.js-questions-page').addClass('hidden')
+//       $('.js-feedback').addClass('hidden')
+//     } 
+   
+// }
 
 function renderPage(state, element) {
   //Start visible; 3 hidden
@@ -164,38 +212,12 @@ function renderPage(state, element) {
         console.log('derp')
         renderFeedback(state, $('body'))
         $('.js-feedback-page')
-    } else if (state.view === 'final') {
+    } else if (state.view === 'results') {
 
     }
    
 }
 
-
-// Event handlers
-// When start button is submitted
-function handlesStart () {
-	$('.start').on('click', function(event) {
-  // 1. Update page view to question page
-  	updateViewToQuestionPage(appState,'question');
-	});
-}
-
-//Handleanswersubmit does not detect button clicks
-function handlesAnswerSubmit() {
-    $('.js-question-submit').submit(function(event) {
-    // 1. Retrieve from DOM - which answer was clicked?
-    let userChoice =  $(this).closest('input[type=radio]');
-    console.log(userChoice);
-    // 2. Change state view to feedback page
-  updateViewToFeedbackPage(appState,'feedback');
-  });
-}
-
-$(function() {
-	handlesStart();
-  handlesAnswerSubmit();
-  //When will currentQuestion be incremented?
-})
 
 /*      
       // start
@@ -204,28 +226,24 @@ $(function() {
       $('.js-feedback-wrong').addClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // questions
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').removeClass('hidden')
       $('.js-feedback-wrong').addClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // feedback right
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').removeClass('hidden')
       $('.js-feedback-wrong').addClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // feedback wrong
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').addClass('hidden')
       $('.js-feedback-wrong').removeClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // results
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').addClass('hidden')
@@ -233,3 +251,39 @@ $(function() {
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').removeClass('hidden')
 */
+
+// Event handlers
+// When start button is submitted
+function handlesStart () {
+  $('.button').on('click', function(event) {
+  // 1. Change state with state mod functio
+    updateViewToQuestionPage(appState,'question');
+  // 2. Invoke render function
+  });
+}
+
+// Answer is submitted
+$('.js-questions-page').on('click', function(event) {
+  // 1. Retrieve from DOM - which answer was clicked?
+  let userChoice =  $(this).closest('input[type=radio]');
+  console.log(userChoice);
+  // 2. Change state with state mod function
+
+  // 3. Invoke render function
+});
+
+$(function() {
+  handlesStart();
+  bgAudio = document.getElementById("wav");
+  bgAudio.volume = 0.04;
+ $('#wav').get(0).play();
+
+})
+
+//state.questions[index].choice[1]
+
+
+document.getElementById("button").onclick = (function() {
+    document.getElementsByTagName('audio')[0].play();
+    return false;
+});
