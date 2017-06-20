@@ -5,9 +5,10 @@
 // Create your initial state object
 var appState = {
     questions: [],
+    currentQuestion: 0,
     score: 0,
     correctAnswer: [],
-    page: 0
+    view: 'start' || 'question' || 'feedback' || 'results'
 
     //page 0: start; page 1: question; page 2: results; 3: final;
     // User's answer choice(s)	
@@ -57,10 +58,10 @@ var appState = {
 
 //for Current ?: index+1 edge case for question 5: may produce undefined
 let questionTemplate = (state, index) => {
-  return (`<h2>Question #: ${state.questions[index].question}</h2>
+  return (`<h2>Question #${state.questions[index]}: <br>${state.questions[index].question}</h2>
       <form>
         <fieldset>
-          <legend> Question: </legend>
+          <legend> Pick one: </legend>
           <input id="answer0" type="radio" name="answer" value="0" required>	
           <label for="answer0">${state.questions[index].choice[0]}</label>
           <input id="answer0" type="radio" name="answer" value="1">
@@ -70,16 +71,24 @@ let questionTemplate = (state, index) => {
           <input for="answer0" type="radio" name="answer" value="3">
           <label id="answer3">${state.questions[index].choice[3]}</label>			
         </fieldset>
-        <button type="submit jq-question-submit">Submit Answer</button>
+        <button class = "button" type="button jq-question-submit">Submit Answer</button>
 		  </form>
-      <p class="js-current-question">Current ?: ${state.questions[index+1]} out of 5</p>
-      <p class="js-score">Score: ${state.score}</p>`);
+   
+      <p class="js-score">Score: ${state.score} / 5</p>`);
   };
 
+// let feedbackTemplate = (state, index) => {
+//   //todo : create ternary / if what outputs return You were right or You were wrong depending on answer
+//   return (`
+//       <h3>You were right!</h3>
+//       <p>Press next to proceed to next question:</p>
+//       <button type="submit">Next Question</button>
+//   `);
+// };
 
 let correctAnswerTemplate = (state, index) => {
   return (`
-    <div class="js-feedback-right">
+    <div class="js-feedback-right-page">
       <h3>You were right!</h3>
       <p>Press next to proceed to next question:</p>
       <button type="submit">Next Question</button>
@@ -89,7 +98,7 @@ let correctAnswerTemplate = (state, index) => {
 
 let wrongAnswerTemplate = (state, index) => {
   return (`
-    <div class="js-feedback-wrong">
+    <div class="js-feedback-wrong-page">
       <h3>Oops, you got that one wrong.</h3>
       <p>Press next to proceed to next question:</p>
       <button type="submit">Next Question</button>
@@ -106,12 +115,26 @@ function randomQuestion(state) {
 
 }
 
-function startQuiz(state) {
+// function startQuiz(state) {
+// 	//move from start page to the questions page
+// 	//move from 0 to 1
+// 	appState.page++;
+// 	renderPage(state, appState.page, $('body'))
+// }
+
+function updateViewToQuestionPage(state, view) {
 	//move from start page to the questions page
 	//move from 0 to 1
-	appState.page++;
-	renderPage(state, appState.page, $('body'))
+  state.view = view;
+	renderPage(state, $('body'));
 }
+
+function updateViewToFeedbackPage(state, view) {
+  //move from question page to the feedback page
+  state.view = 'feedback';
+  renderPage(state, $('body'));
+}
+// get question
 
 // get question
 
@@ -138,48 +161,63 @@ const resetQuiz = function(state) {
 }
 
 // Render functions...
-function renderQuestion(state,index,element) {
-  console.log(`I am on question: ${index}`);
+function renderQuestion(state, element) {
+  console.log(`I am on question: ${state.currentQuestion}`);
 
   $('.js-questions-page').removeClass('hidden');
 
   const myHTML = element.find('.js-questions-page');
-  $(myHTML).html(questionTemplate(state, index));
+  $(myHTML).html(questionTemplate(state, state.currentQuestion));
 }
 
-function renderResults(state,index,element) {
-  console.log(`I am looking at results after question: ${index}`);
+function renderResults(state,element) {
+  console.log(`I am looking at results after question: ${state.currentQuestion}`);
+  $('.js-questions-page').addClass('hidden');
+  $('.js-feedback-page').removeClass('hidden');
+
+  const myHTML = element.find('.js-feedback-page');
+  //ternary operator based template
+  $(myHTML).html(feedbackTemplate(state, state.currentQuestion));
 }
 
-// X pages:
-  //0: start
-  //1: question (1)
-  //2: Results
-  //3: questions (2)
-  //4: results
-  //5: questions (3)
-  //6: results
-  //7: questions (4)
-  //8: results
-  //9: questions (5)
-  //10: Final Page
+// function renderPage(state, currentPage, element) {
+// 	//Start visible; 3 hidden
+// 	//Questions page visible; 3 hidden
 
-function renderPage(state, currentPage, element) {
-	//Start visible; 3 hidden
-	//Questions page visible; 3 hidden
+//      if (currentPage === 0 ) {
+//       //startPageRenderFunction():
+//      } else if (currentPage === 1) {
+//       $('.js-start-page').addClass('hidden')
+//       renderQuestion(state, 0, $('body'));
+//       // update score
+//     } else if (currentPage === 2) {
+//       $('.js-questions-page').addClass('hidden')
+//       $('.js-feedback').addClass('hidden')
+//     } 
+   
+// }
 
-     if (currentPage === 0 ) {
+function renderPage(state, element) {
+  //Start visible; 3 hidden
+  $('div[class$="-page"').addClass('hidden');
+
+     if (state.view === 'start' ) {
       //startPageRenderFunction():
-     } else if (currentPage === 1) {
-      $('.js-start-page').addClass('hidden')
-      renderQuestion(state, 0, $('body'));
-      // update score
-    } else if (currentPage === 2) {
-      $('.js-questions-page').addClass('hidden')
-      $('.js-feedback').addClass('hidden')
-    } 
+     } else if (state.view === 'question') {
+        console.log('we in here');
+        renderQuestion(state, $('body'));
+        $('.js-questions-page').removeClass('hidden');
+        // update score
+    } else if (state.view === 'feedback') {
+        console.log('derp')
+        renderFeedback(state, $('body'))
+        $('.js-feedback-page')
+    } else if (state.view === 'results') {
+
+    }
    
 }
+
 
 /*      
       // start
@@ -188,28 +226,24 @@ function renderPage(state, currentPage, element) {
       $('.js-feedback-wrong').addClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // questions
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').removeClass('hidden')
       $('.js-feedback-wrong').addClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // feedback right
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').removeClass('hidden')
       $('.js-feedback-wrong').addClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // feedback wrong
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').addClass('hidden')
       $('.js-feedback-wrong').removeClass('hidden')
       $('.js-feedback-right').addClass('hidden')
       $('.js-results').addClass('hidden')
-
       // results
       $('.js-start-page').addClass('hidden')
       $('.js-questions-page').addClass('hidden')
@@ -221,15 +255,15 @@ function renderPage(state, currentPage, element) {
 // Event handlers
 // When start button is submitted
 function handlesStart () {
-	$('.start').on('click', function(event) {
+	$('.button').on('click', function(event) {
   // 1. Change state with state mod functio
-  	startQuiz(appState);
+    updateViewToQuestionPage(appState,'question');
   // 2. Invoke render function
 	});
 }
 
 // Answer is submitted
-$('.js-question-submit').on('click', function(event) {
+$('.js-questions-page').on('click', function(event) {
   // 1. Retrieve from DOM - which answer was clicked?
   let userChoice =  $(this).closest('input[type=radio]');
   console.log(userChoice);
@@ -239,8 +273,18 @@ $('.js-question-submit').on('click', function(event) {
 });
 
 $(function() {
-  renderPage(appState, appState.page, $('body'));
+  renderPage(appState, $('body'));
 	handlesStart();
+  bgAudio = document.getElementById("wav");
+  bgAudio.volume = 0.04;
+ // $('#wav').get(0).play();
+
 })
 
 //state.questions[index].choice[1]
+
+
+document.getElementById("button").onclick = (function() {
+    document.getElementsByTagName('audio')[0].play();
+    return false;
+});

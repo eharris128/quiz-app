@@ -1,7 +1,124 @@
-ul > li {
-	list-style-type: none;
+* {
+  font-family: monaco, monospace;
+}
+
+/*  header  */
+header {
+    /*padding-top: 7px;*/
+    padding-left: 15px;
+    margin-top: 50px;
+    text-align: left;
+    background: black;
+    border-bottom: 0.5px solid darkgray;
+    color: white;
+    /*margin: 7px auto;*/
+    border: .5px solid #171517;
+}
+header h1 {
+    font-size: 30px;
+}
+header p {
+    font-size: 20px;
+}
+
+/*  business  */
+label {
+  display: inline-block;
+  background-color: gray;
+  padding: 5px 20px;
+  font-family: Arial;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+legend, h2 {
+    text-align: left;
+}
+
+input[type=radio]{
+  display: none;
+ 
 }
 
 .hidden {
 	display: none;
+}
+
+/*  body  */
+
+body {
+  position: relative;
+  /*background-color: #2b3e50;*/
+  background: url(http://media.giphy.com/media/TZf4ZyXb0lXXi/giphy.gif) 25%;
+  background-size: cover;
+background-repeat:no-repeat;
+  text-align: center;
+  color: white;
+  /*background-repeat: no-repeat;*/
+
+/*box-shadow:inset 6px 5px 40px 9px #142529;*/
+  height: 500px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  /*outline: 2px solid black;*/
+}
+.container {
+	/*position: relative;*/
+    display: block;
+    /*padding: 10px 15px;*/
+    /*margin-bottom: -1px;*/
+    background-color: #4e5d6c;
+    /*border: 1px solid;*/
+}
+/* questions */
+	#questions h2 {
+		font-size: 22px;
+	}
+
+	#questions {
+		width: 400px;
+		padding: 30px 30px 10px 30px;
+		margin: 0 auto;
+		font-size: 22px;
+		border-radius: 2px;
+		background: #4e5d6c;
+		/*box-shadow: 2px 3px 35px black;*/
+		margin-bottom: 50px;
+	}
+
+    #questions p {
+        font-size: 20px;
+    }
+	input[type='radio'] {
+		font-size: 40px;
+	}
+
+.js.start-page, .js-questions-page, .js-feedback-wrong, .js-feedback-right, .js-results {
+  /*position: absolute;
+  margin: auto;
+  
+  width: 100%;
+  top: 25%;*/
+  /*    padding: 10px;*/
+}
+
+.button{
+ display: inline-block;
+ border: none;
+ color: #000000;
+ border-radius: 3px 3px 3px 3px;
+ font-family: Verdana;
+ width: auto;
+ height: auto;
+ font-size: 21px;
+ padding: 6px 61px;
+     margin-top: 10px;
+ background-color: #E0632D;
+}
+.button:hover, .button:active{
+ border: none;
+ color: #155570;
+ box-shadow: inset 0 1px 0 0 #FFF6CE,inset 0 -1px 0 0 #E3C852,inset 0 0 0 1px #FCE88D;
+ background-color: #868AFC;
 }
